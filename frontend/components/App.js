@@ -5,6 +5,7 @@ import LoginForm from './LoginForm'
 import Message from './Message'
 import ArticleForm from './ArticleForm'
 import Spinner from './Spinner'
+import axios from 'axios'
 
 const articlesUrl = 'http://localhost:9000/api/articles'
 const loginUrl = 'http://localhost:9000/api/login'
@@ -18,7 +19,7 @@ export default function App() {
 
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
-  const redirectToLogin = () => { /* ✨ implement */ }
+  const redirectToLogin = () => { navigate("/login") }
   const redirectToArticles = () => { /* ✨ implement */ }
 
   const logout = () => {
@@ -39,6 +40,23 @@ export default function App() {
   }
 
   const getArticles = () => {
+    console.log(localStorage.getItem('token'))
+    if(!localStorage.getItem("token")) {
+      return redirectToLogin } else {
+    const token = localStorage.getItem("token");
+   axios.get("http://localhost:9000/api/articles", {
+    headers: {
+      Authorization: token
+    },
+   })
+   .then(res => {
+      console.log(res.data.articles)
+      setArticles(res.data.articles)
+   })
+   .catch(err => {
+    console.log(err)
+   })
+  }
     // ✨ implement
     // We should flush the message state, turn on the spinner
     // and launch an authenticated request to the proper endpoint.
@@ -68,8 +86,8 @@ export default function App() {
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner />
-      <Message />
+      <Spinner on={spinnerOn} />
+      <Message message={message} />
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
         <h1>Advanced Web Applications</h1>
@@ -78,11 +96,11 @@ export default function App() {
           <NavLink id="articlesScreen" to="/articles">Articles</NavLink>
         </nav>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm login={login}  />} />
           <Route path="articles" element={
             <>
-              <ArticleForm />
-              <Articles />
+              <ArticleForm setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} postArticle={postArticle} />
+              <Articles getArticles={getArticles} deleteArticle={deleteArticle} articles={articles} setCurrentArticleId={setCurrentArticleId}/>
             </>
           } />
         </Routes>

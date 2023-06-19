@@ -1,15 +1,22 @@
 import React, { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import PT from 'prop-types'
+import axios from 'axios';
 
 export default function Articles(props) {
-  // ✨ where are my props? Destructure them here
+  const {getArticles, deleteArticle, articles, setCurrentArticleId} = props;
+
+  if(!localStorage.getItem("token")) {
+    return <Navigate to="/" />
+  }
 
   // ✨ implement conditional logic: if no token exists
   // we should render a Navigate to login screen (React Router v.6)
+  
+  console.log("3",articles)
 
   useEffect(() => {
-    // ✨ grab the articles here, on first render only
+   getArticles()
   }, [])
 
   return (
@@ -18,9 +25,9 @@ export default function Articles(props) {
     <div className="articles">
       <h2>Articles</h2>
       {
-        ![].length
+        !articles.length
           ? 'No articles yet'
-          : [].map(art => {
+          : articles.map(art => {
             return (
               <div className="article" key={art.article_id}>
                 <div>
