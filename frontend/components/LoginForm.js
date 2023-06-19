@@ -41,9 +41,6 @@ export default function LoginForm(props) {
     }
   }
 
-  console.log('user', values.username.length)
-  console.log('pass', values.password.length)
-
   return (
     <form id="loginForm" onSubmit={onSubmit}>
       <h2>Login</h2>
