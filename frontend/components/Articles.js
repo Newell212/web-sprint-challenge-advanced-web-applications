@@ -4,7 +4,7 @@ import PT from 'prop-types'
 import axios from 'axios';
 
 export default function Articles(props) {
-  const { getArticles, deleteArticle, articles, setCurrentArticleId } = props;
+  const { getArticles, deleteArticle, articles, setCurrentArticleId, currentArticleId, updateArticle } = props;
   const [disable, setDisable] = useState(false)
 
   if (!localStorage.getItem("token")) {
@@ -16,10 +16,10 @@ export default function Articles(props) {
 
 
   const editArticle = (evt) => {
-    console.log(evt.target.id)
     setCurrentArticleId(evt.target.id)
-    console.log(articles)
   }
+
+  
 
   const removeArticle = (evt) => {
     const id = evt.target.id

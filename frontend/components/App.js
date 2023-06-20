@@ -87,6 +87,7 @@ export default function App() {
   }
 
   const postArticle = article => {
+    console.log(user)
     setSpinnerOn(true)
     if(!localStorage.getItem("token")) {
       return redirectToLogin
@@ -111,8 +112,23 @@ export default function App() {
     // You'll know what to do! Use log statements or breakpoints
     // to inspect the response from the server.
   }
-
+  
+console.log(currentArticleId)
   const updateArticle = ({ article_id, article }) => {
+    console.log(article)
+    const token = localStorage.getItem("token")
+    axios.put(`http://localhost:9000/api/articles/${article_id}`, article, {
+      headers: {
+        Authorization: token
+      }
+    })
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    
     // ✨ implement
     // You got this!
   }
@@ -140,8 +156,8 @@ export default function App() {
           <Route path="/" element={<LoginForm login={login} />} />
           <Route path="articles" element={
             <>
-              <ArticleForm setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} postArticle={postArticle} />
-              <Articles getArticles={getArticles} deleteArticle={deleteArticle} articles={articles} setCurrentArticleId={setCurrentArticleId} />
+              <ArticleForm setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} postArticle={postArticle} currentArticleId={currentArticleId} articles={articles} />
+              <Articles getArticles={getArticles} deleteArticle={deleteArticle} articles={articles} setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} currentArticleId={currentArticleId} />
             </>
           } />
         </Routes>
