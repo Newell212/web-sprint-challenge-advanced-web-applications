@@ -17,12 +17,13 @@ export default function ArticleForm(props) {
 
   const onChange = evt => {
     const { id, value } = evt.target
-    console.log(id)
     setValues({ ...values, [id]: value })
   }
 
   const onSubmit = evt => {
     evt.preventDefault()
+    postArticle(values)
+    setValues(initialFormValues)
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.

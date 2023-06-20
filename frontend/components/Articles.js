@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import PT from 'prop-types'
 import axios from 'axios';
 
 export default function Articles(props) {
   const { getArticles, deleteArticle, articles, setCurrentArticleId } = props;
+  const [disable, setDisable] = useState(false)
 
   if (!localStorage.getItem("token")) {
     return <Navigate to="/" />
@@ -56,8 +57,8 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={false} id={art.article_id} onClick={editArticle}>Edit</button>
-                  <button disabled={false} id={art.article_id} onClick={removeArticle}>Delete</button>
+                  <button disabled={disable} id={art.article_id} onClick={editArticle}>Edit</button>
+                  <button disabled={disable} id={art.article_id} onClick={removeArticle}>Delete</button>
                 </div>
               </div>
             )
