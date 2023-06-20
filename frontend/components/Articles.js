@@ -4,19 +4,39 @@ import PT from 'prop-types'
 import axios from 'axios';
 
 export default function Articles(props) {
-  const {getArticles, deleteArticle, articles, setCurrentArticleId} = props;
+  const { getArticles, deleteArticle, articles, setCurrentArticleId } = props;
 
-  if(!localStorage.getItem("token")) {
+  if (!localStorage.getItem("token")) {
     return <Navigate to="/" />
   }
 
   // ✨ implement conditional logic: if no token exists
   // we should render a Navigate to login screen (React Router v.6)
-  
-  console.log("3",articles)
+
+
+  const editArticle = (evt) => {
+    console.log(evt.target.id)
+    setCurrentArticleId(evt.target.id)
+    console.log(articles)
+  }
+
+  const removeArticle = (evt) => {
+    const id = evt.target.id
+    const token = localStorage.getItem("token");
+    axios.delete(`http://localhost:9000/api/articles/${id}`, {
+      headers: {
+        Authorization: token
+      }
+    })
+      .then(res => {
+        console.log(res)
+        deleteArticle(id)
+      })
+
+  }
 
   useEffect(() => {
-   getArticles()
+    getArticles()
   }, [])
 
   return (
@@ -36,8 +56,8 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={true} onClick={Function.prototype}>Edit</button>
-                  <button disabled={true} onClick={Function.prototype}>Delete</button>
+                  <button disabled={false} id={art.article_id} onClick={editArticle}>Edit</button>
+                  <button disabled={false} id={art.article_id} onClick={removeArticle}>Delete</button>
                 </div>
               </div>
             )
