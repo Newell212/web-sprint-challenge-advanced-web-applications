@@ -17,7 +17,8 @@ export default function App() {
   const [currentArticleId, setCurrentArticleId] = useState()
   const [spinnerOn, setSpinnerOn] = useState(false)
   const [user, setUser] = useState('')
-
+  const [edit, setEdit] = useState(false)
+  const [isTrue, setIsTrue] = useState(false)
   // ✨ Research `useNavigate` in React Router v.6
   const navigate = useNavigate()
   const redirectToLogin = () => { navigate("/") }
@@ -113,9 +114,7 @@ export default function App() {
     // to inspect the response from the server.
   }
   
-console.log(currentArticleId)
-  const updateArticle = ({ article_id, article }) => {
-    console.log(article)
+  const updateArticle = ( article_id, article ) => {
     const token = localStorage.getItem("token")
     axios.put(`http://localhost:9000/api/articles/${article_id}`, article, {
       headers: {
@@ -123,7 +122,8 @@ console.log(currentArticleId)
       }
     })
     .then(res => {
-      console.log(res)
+      setMessage(res.data.message)
+      getArticles()
     })
     .catch(err => {
       console.log(err)
@@ -156,8 +156,8 @@ console.log(currentArticleId)
           <Route path="/" element={<LoginForm login={login} />} />
           <Route path="articles" element={
             <>
-              <ArticleForm setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} postArticle={postArticle} currentArticleId={currentArticleId} articles={articles} />
-              <Articles getArticles={getArticles} deleteArticle={deleteArticle} articles={articles} setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} currentArticleId={currentArticleId} />
+              <ArticleForm setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} postArticle={postArticle} currentArticleId={currentArticleId} articles={articles} edit={edit} isTrue={isTrue} setIsTrue={setIsTrue} />
+              <Articles getArticles={getArticles} deleteArticle={deleteArticle} articles={articles} setCurrentArticleId={setCurrentArticleId} updateArticle={updateArticle} currentArticleId={currentArticleId} setEdit={setEdit} setIsTrue={setIsTrue} />
             </>
           } />
         </Routes>
